@@ -32,18 +32,6 @@ import com.app.model.UserMapper;
 @PropertySource(value = { "classpath:application.properties" })
 public class BatchConfig {
      
-	@Value("${spring.datasource.driver-class-name}")
-	private String DB_DRIVER;
-	
-	@Value("${spring.datasource.url}")
-	private String DB_URL;
-	
-	@Value("${spring.datasource.username}")
-	private String DB_USERNAME;
-	
-	@Value("${spring.datasource.password}")
-	private String DB_PASSWORD;
-	
 	@Autowired
 	DataSource datasource;
 	
@@ -105,7 +93,7 @@ public class BatchConfig {
     @Bean
     public JdbcBatchItemWriter<User> writer() {
         JdbcBatchItemWriter<User> itemWriter = new JdbcBatchItemWriter<User>();
-        itemWriter.setDataSource(datasource());
+        itemWriter.setDataSource(datasource);
         itemWriter.setSql("INSERT INTO EMPLOYEE (ID, FIRSTNAME, LASTNAME) VALUES (:id, :firstName, :lastName)");
         itemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<User>());
         return itemWriter;
@@ -117,15 +105,15 @@ public class BatchConfig {
         return userItemWriter;
     }
      
-    @Bean
-	public DataSource datasource() {
-		DriverManagerDataSource dataSource=new DriverManagerDataSource();
-		dataSource.setDriverClassName(DB_DRIVER);
-		dataSource.setUrl(DB_URL);
-		dataSource.setUsername(DB_USERNAME);
-		dataSource.setPassword(DB_PASSWORD);		
-		return dataSource;		
-	}    
+//    @Bean
+//	public DataSource datasource() {
+//		DriverManagerDataSource dataSource=new DriverManagerDataSource();
+//		dataSource.setDriverClassName(DB_DRIVER);
+//		dataSource.setUrl(DB_URL);
+//		dataSource.setUsername(DB_USERNAME);
+//		dataSource.setPassword(DB_PASSWORD);		
+//		return dataSource;		
+//	}    
    
     
 }
