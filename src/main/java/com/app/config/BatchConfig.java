@@ -11,10 +11,13 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.LineMapper;
+import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +25,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import com.app.model.User;
-import com.app.model.UserMapper;
+import com.app.entity.User;
+
 
 @Configuration
 @EnableBatchProcessing
@@ -44,7 +46,7 @@ public class BatchConfig {
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
     
-    @Value("classPath:/userInput/userInputData.csv")
+    @Value("classpath:userInputData.csv")
     private org.springframework.core.io.Resource userInputResource;
     
     @Bean
@@ -62,39 +64,46 @@ public class BatchConfig {
                 .get("step")
                 .<User, User>chunk(1)
                 .reader(reader())
-//                .processor(processor())
+                .processor(processor())
                 .writer(jpawriter())
                 .build();
     }
     
-//    @Bean
-//    public ItemProcessor<User, User> processor() {
-//        return new DBLogProcessor();
-//    }
-     
+    @Bean
+    public ItemProcessor<User, User> processor() {
+        return new DBLogProcessor();
+    }
+    
+    
     @Bean
     public FlatFileItemReader<User> reader() {
-        FlatFileItemReader<User> userReader = new FlatFileItemReader<User>();
-        DelimitedLineTokenizer delimeter = new DelimitedLineTokenizer();
-        String[] tokens= {"userId","userName","gender","salary","age","pan","adhar"};
-        delimeter.setNames(tokens);
-        delimeter.setDelimiter(",");
-        DefaultLineMapper<User> lineMapper = new DefaultLineMapper<User>();
-        lineMapper.setLineTokenizer(delimeter);        
-        userReader.setResource(userInputResource);
-        UserMapper userMapper=new UserMapper();
-        lineMapper.setFieldSetMapper(userMapper);
-        userReader.setLineMapper(lineMapper);
-        userReader.setLinesToSkip(0);
-        return userReader;
+        FlatFileItemReader<User> itemReader = new FlatFileItemReader<User>();
+        itemReader.setLineMapper(lineMapper());
+        itemReader.setLinesToSkip(1);
+        itemReader.setResource(userInputResource);
+        return itemReader;
     }
+
  
+    @Bean
+    public LineMapper<User> lineMapper() {
+        DefaultLineMapper<User> lineMapper = new DefaultLineMapper<User>();
+        DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
+        lineTokenizer.setNames(new String[] { "userid", "username", "gender", "age", "salary", "pan", "adhar" });
+        lineTokenizer.setIncludedFields(new int[] { 0, 1, 2, 3, 4, 5, 6 });
+        BeanWrapperFieldSetMapper<User> fieldSetMapper = new BeanWrapperFieldSetMapper<User>();
+        fieldSetMapper.setTargetType(User.class);
+        lineMapper.setLineTokenizer(lineTokenizer);
+        lineMapper.setFieldSetMapper(fieldSetMapper);
+        return lineMapper;
+    }
      
     @Bean
     public JdbcBatchItemWriter<User> writer() {
         JdbcBatchItemWriter<User> itemWriter = new JdbcBatchItemWriter<User>();
         itemWriter.setDataSource(datasource);
-        itemWriter.setSql("INSERT INTO EMPLOYEE (ID, FIRSTNAME, LASTNAME) VALUES (:id, :firstName, :lastName)");
+        itemWriter.setSql("INSERT INTO User (username, gender,age,salary,pan,adhar)"
+        		+ " VALUES (:username, :gender ,:age, :salary, :pan, :adhar)");
         itemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<User>());
         return itemWriter;
     }
@@ -103,17 +112,8 @@ public class BatchConfig {
     	JpaItemWriter<User> userItemWriter = new JpaItemWriter<User>();
     	userItemWriter.setEntityManagerFactory(entityManager);    	
         return userItemWriter;
-    }
-     
-//    @Bean
-//	public DataSource datasource() {
-//		DriverManagerDataSource dataSource=new DriverManagerDataSource();
-//		dataSource.setDriverClassName(DB_DRIVER);
-//		dataSource.setUrl(DB_URL);
-//		dataSource.setUsername(DB_USERNAME);
-//		dataSource.setPassword(DB_PASSWORD);		
-//		return dataSource;		
-//	}    
+    }     
+ 
    
     
 }

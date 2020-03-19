@@ -24,7 +24,7 @@ public class LoanManagementProjectApplication {
 		SpringApplication.run(LoanManagementProjectApplication.class, args);
 	}
     
-	@Scheduled(fixedDelay=5000)
+	@Scheduled(cron = "0 */1 * * * ?")
     public void perform() throws Exception
     {
         JobParameters params = new JobParametersBuilder()
