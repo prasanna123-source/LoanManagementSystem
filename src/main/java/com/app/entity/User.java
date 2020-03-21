@@ -13,8 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name="User")
 public class User {
 	
 	@Id
@@ -30,16 +31,6 @@ public class User {
 	private String pan;
 	private String adhar;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "loanId")    
-	private List<UserLoan> userloans;
-	
-	public List<UserLoan> getUserloans() {
-		return userloans;
-	}
-	public void setUserloans(List<UserLoan> userloans) {
-		this.userloans = userloans;
-	}
 	
 	public String getGender() {
 		return gender;
@@ -83,9 +74,8 @@ public class User {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public User(int userId, String userName, String gender, int age, int salary, String pan, String adhar,
-			List<UserLoan> userloans) {
-		super();
+	public User(int userId, String userName, String gender, int age, int salary, String pan, String adhar)			
+	{	
 		this.userId = userId;
 		this.userName = userName;
 		this.gender = gender;
@@ -93,13 +83,9 @@ public class User {
 		this.salary = salary;
 		this.pan = pan;
 		this.adhar = adhar;
-		this.userloans = userloans;
+		
 	}
-	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", userName=" + userName + ", gender=" + gender + ", age=" + age + ", salary="
-				+ salary + ", pan=" + pan + ", adhar=" + adhar + ", userloans=" + userloans + "]";
-	}
+
 	public User() {
 		super();		
 	}	

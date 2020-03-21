@@ -1,6 +1,5 @@
 package com.app.service.impl;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -8,8 +7,10 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.constants.LoanDetailConstants;
 import com.app.entity.LoanDetails;
 import com.app.entity.User;
+import com.app.entity.UserLoan;
 import com.app.model.LoanApplianceDTO;
 import com.app.model.LoanRequest;
 import com.app.repository.LoanAccountRepository;
@@ -36,8 +37,14 @@ public class LoanApplicationserviceImpl implements LoanApplicationService{
 	@Autowired
 	UserLoanRepository userLoanRepo;
 	
-	public LoanDetails saveLoan(LoanApplianceDTO loanApplianceDTO) {
+	public LoanDetails applyForLoan(LoanApplianceDTO loanApplianceDTO) {
+		LoanDetails verifyloan = verifyLoanData(loanApplianceDTO);
+		LoanDetails response = loanDetailsRepo.save(verifyloan);
+		return response;
+	}
 		
+		
+	public LoanDetails verifyLoanData(LoanApplianceDTO loanApplianceDTO) {
 		Optional<User> userRes = userRepo.findById(loanApplianceDTO.getUserId());
 		LoanDetails loanDetails = new LoanDetails();
 		if (loanApplianceDTO != null) {
@@ -48,39 +55,55 @@ public class LoanApplicationserviceImpl implements LoanApplicationService{
 					loanDetails.setDuration(loanApplianceDTO.getNoofYears());
 				if (loanApplianceDTO.getRateOfInterest() !=null)
 					loanDetails.setInterestRate((loanApplianceDTO.getRateOfInterest()));
-					
+				calculateRateOfInterest(loanDetails,loanApplianceDTO);
+				  loanDetails.setUser(user);
 			});
-		LoanDetails response = userLoanRepo.save(mappedData);
-		return response;
+		}		
+	     return loanDetails;
+	}
+
+
+//	@Override
+//	public List<User> fetLoans() {
+//		return userDao.findAll();
+//	}
+
+
+	public void calculateRateOfInterest(LoanDetails loanDetails, LoanApplianceDTO loanApplianceDTO) {
+		double emi;
+		Float loanAmt = loanApplianceDTO.getAmount();
+		//Float rate = request.getRateOfInterest();
+		Double rate=LoanDetailConstants.RATE_OF_INTEREST;
+		Integer tenure = loanApplianceDTO.getNoofYears();
+		rate = rate / (12 * 100);
+		tenure = tenure * 12;
+		emi = (loanAmt * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
+		loanDetails.setEmiAmount(emi);
 	}
 
 
 	@Override
-	public List<User> fetLoans() {
-		return userDao.findAll();
+	public Optional<UserLoan> findLoanById(long loanId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public void calculateLoanAmount(LoanDetails loanDetails, LoanRequest request) {
-		double emi;
-		Integer loanAmt = request.getLoanAmount();
-		//Float rate = request.getRateOfInterest();
-		Double rate=LoanDetailConstants.RATE_OF_INTEREST;
-		Integer tenure = request.getTenure();
-		rate = rate / (12 * 100);
-		tenure = tenure * 12;
-		emi = (loanAmt * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
-		loanDetails.setEmiAmt(emi);
+
+	@Override
+	public LoanDetails saveLoan(LoanRequest request) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public Optional<User> fetchLoan(Integer uid) {
-		Optional<User> user = userDao.findById(uid);
-		if(user.isPresent()) {
-			return user;
-		}
-		else {
-			return null;
-		}
-	}
+//	public Optional<User> fetchLoan(Integer uid) {
+//		Optional<User> user = userDao.findById(uid);
+//		if(user.isPresent()) {
+//			return user;
+//		}
+//		else {
+//			return null;
+//		}
+//	}
 
 	
 }

@@ -10,7 +10,7 @@ import com.app.model.LoanRequest;
 
 public interface LoanApplicationService {
 //	User applyForLoan(User user);	
-	LoanApplianceDTO applyForLoan(LoanApplianceDTO loanApplianceDTO) ;
+	public LoanDetails applyForLoan(LoanApplianceDTO loanApplianceDTO) ;
 	public Optional<UserLoan> findLoanById(long loanId);
 	LoanDetails saveLoan(LoanRequest request); 
 }

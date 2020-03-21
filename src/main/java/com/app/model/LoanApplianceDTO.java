@@ -7,8 +7,14 @@ public class LoanApplianceDTO {
     private Integer noofYears;    
 	private Float amount ;
 	private Float rateOfInterest;
+	private int loan_id;
 	
-	
+	public int getLoan_id() {
+		return loan_id;
+	}
+	public void setLoan_id(int loan_id) {
+		this.loan_id = loan_id;
+	}
 	public Float getAmount() {
 		return amount;
 	}

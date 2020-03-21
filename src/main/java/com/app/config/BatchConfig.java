@@ -102,8 +102,8 @@ public class BatchConfig {
     public JdbcBatchItemWriter<User> writer() {
         JdbcBatchItemWriter<User> itemWriter = new JdbcBatchItemWriter<User>();
         itemWriter.setDataSource(datasource);
-        itemWriter.setSql("INSERT INTO User (userName, gender,age,salary,pan,adhar)"
-        		+ " VALUES (:username, :gender ,:age, :salary, :pan, :adhar)");
+        itemWriter.setSql("INSERT INTO User (user_name, gender,age,salary,pan,adhar)"
+        		+ " VALUES (:user_name, :gender ,:age, :salary, :pan, :adhar)");
         itemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<User>());
         return itemWriter;
     }

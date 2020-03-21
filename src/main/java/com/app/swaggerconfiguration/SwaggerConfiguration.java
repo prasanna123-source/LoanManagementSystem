@@ -1,4 +1,4 @@
-package com.prasanna.demo.SwaggerConfiguration;
+package com.app.swaggerconfiguration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class SwaggerConfiguration {
 	        return new Docket(DocumentationType.SWAGGER_2)  
 	          .select()                                  
 	          .apis(RequestHandlerSelectors.any())              
-	          .paths(PathSelectors.any())                          
+	          .paths(PathSelectors.any()) 	          
 	          .build();   
 }
 }

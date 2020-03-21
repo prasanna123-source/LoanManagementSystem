@@ -1,6 +1,7 @@
 package com.app.entity;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,12 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="loan")
 public class UserLoan {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)      
-	private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)   
+	@Column(name = "loan_id")
     private int loanId;  
 	private String loanType;
     private Double amount;   
@@ -30,15 +30,6 @@ public class UserLoan {
     private User user;
 
 	
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public int getLoanId() {
 		return loanId;
 	}
@@ -103,10 +94,10 @@ public class UserLoan {
 		this.user = user;
 	}
 
-	public UserLoan(Integer id, int loanId, String loanType, Double amount, Integer noofYears, Float interest,
+	public UserLoan(int loanId, String loanType, Double amount, Integer noofYears, Float interest,
 			Float balance, Float emi, User user) {
 		super();
-		this.id = id;
+		
 		this.loanId = loanId;
 		this.loanType = loanType;
 		this.amount = amount;

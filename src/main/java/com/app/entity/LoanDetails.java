@@ -1,12 +1,14 @@
 package com.app.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+@Entity
 public class LoanDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,6 +17,9 @@ public class LoanDetails {
 
 	@Column(name = "loan_amount")
 	private Float loanAmount;
+	
+	@Column(name = "emi_Amount")
+	private double emiAmount;
 
 	@Column(name = "duration")
 	private Integer duration;
@@ -26,7 +31,7 @@ public class LoanDetails {
 	private String status;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "loanId", referencedColumnName = "loanId")
+	@JoinColumn(name = "loan_id")
 	private UserLoan loan;
 	
 	@ManyToOne(optional = false)
@@ -88,12 +93,24 @@ public class LoanDetails {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
 
-	public LoanDetails(Integer loanDetailsId, Float loanAmount, Integer duration, Float interestRate, String status,
-			UserLoan loan, User user) {
+	public double getEmiAmount() {
+		return emiAmount;
+	}
+
+	public void setEmiAmount(double emi) {
+		this.emiAmount = emi;
+	}
+
+
+	public LoanDetails(Integer loanDetailsId, Float loanAmount, double emiAmount, Integer duration,
+			Float interestRate, String status, UserLoan loan, User user) {
 		super();
 		this.loanDetailsId = loanDetailsId;
+//		this.loanId = loanId;
 		this.loanAmount = loanAmount;
+		this.emiAmount = emiAmount;
 		this.duration = duration;
 		this.interestRate = interestRate;
 		this.status = status;
@@ -104,7 +121,6 @@ public class LoanDetails {
 	public LoanDetails() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-	
+	}	
 	
 }
