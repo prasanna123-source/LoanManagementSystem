@@ -3,17 +3,17 @@ package com.app.model;
 import com.app.entity.User;
 
 public class LoanApplianceDTO {
-	private String loanType;      
-    private Integer noofYears;
-    private Double rateOfInterest;
-       
-    
-	private Double amount ;
-	public String getLoanType() {
-		return loanType;
+	private int userId;      
+    private Integer noofYears;    
+	private Float amount ;
+	private Float rateOfInterest;
+	
+	
+	public Float getAmount() {
+		return amount;
 	}
-	public void setLoanType(String loanType) {
-		this.loanType = loanType;
+	public void setAmount(Float amount) {
+		this.amount = amount;
 	}
 	public Integer getNoofYears() {
 		return noofYears;
@@ -21,17 +21,20 @@ public class LoanApplianceDTO {
 	public void setNoofYears(Integer noofYears) {
 		this.noofYears = noofYears;
 	}
-	public Double getAmount() {
-		return amount;
+	
+	public int getUserId() {
+		return userId;
 	}
-	public void setAmount(Double amount) {
-		this.amount = amount;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
-	public Double getRateOfInterest() {
+	public Float getRateOfInterest() {
 		return rateOfInterest;
 	}
-	public void setRateOfInterest(Double rateOfInterest) {
+	public void setRateOfInterest(Float rateOfInterest) {
 		this.rateOfInterest = rateOfInterest;
 	}
+	
+	
     
 }

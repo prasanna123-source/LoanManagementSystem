@@ -18,9 +18,12 @@ import javax.persistence.Table;
 public class User {
 	
 	@Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)		
-	private int userid;	
-	private String username;	
+    @GeneratedValue(strategy= GenerationType.IDENTITY)	
+	@Column(name = "user_id")
+	private int userId;	
+	
+	@Column(name = "user_name")
+	private String userName;	
 	private String gender;
 	private int age;
 	private int salary;
@@ -37,18 +40,7 @@ public class User {
 	public void setUserloans(List<UserLoan> userloans) {
 		this.userloans = userloans;
 	}
-	public int getUserid() {
-		return userid;
-	}
-	public void setUserid(int userid) {
-		this.userid = userid;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
+	
 	public String getGender() {
 		return gender;
 	}
@@ -79,24 +71,37 @@ public class User {
 	public void setAdhar(String adhar) {
 		this.adhar = adhar;
 	}
-	public User(int userid, String username, String gender, int age, int salary, String pan, String adhar) {
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public User(int userId, String userName, String gender, int age, int salary, String pan, String adhar,
+			List<UserLoan> userloans) {
 		super();
-		this.userid = userid;
-		this.username = username;
+		this.userId = userId;
+		this.userName = userName;
 		this.gender = gender;
 		this.age = age;
 		this.salary = salary;
 		this.pan = pan;
 		this.adhar = adhar;
-	}
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
+		this.userloans = userloans;
 	}
 	@Override
 	public String toString() {
-		return "User [userid=" + userid + ", username=" + username + ", gender=" + gender + ", age=" + age + ", salary="
-				+ salary + ", pan=" + pan + ", adhar=" + adhar + "]";
+		return "User [userId=" + userId + ", userName=" + userName + ", gender=" + gender + ", age=" + age + ", salary="
+				+ salary + ", pan=" + pan + ", adhar=" + adhar + ", userloans=" + userloans + "]";
+	}
+	public User() {
+		super();		
 	}	
 	
 }

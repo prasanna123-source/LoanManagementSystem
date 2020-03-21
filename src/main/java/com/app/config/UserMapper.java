@@ -1,4 +1,4 @@
-package com.app.entity;
+package com.app.config;
 //package com.app.model;
 //
 //import org.springframework.batch.item.file.mapping.FieldSetMapper;
