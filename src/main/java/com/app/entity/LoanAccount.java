@@ -26,7 +26,12 @@ public class LoanAccount {
 	
 	@Column(name="balance")
 	private Float balance;
-
+	
+	@Column(name="loanAmount")
+	private Float loanAmount;
+	
+	private double emiAmount;
+	
 	@ManyToOne(optional = false)
 	@JoinColumn(name="user_id")
 	private User user;
@@ -79,17 +84,38 @@ public class LoanAccount {
 		this.user = user;
 	}
 
-	public LoanAccount(Integer accountId, String remarks, Float debit, Float credit, Float balance, User user) {
+	public Float getLoanAmount() {
+		return loanAmount;
+	}
+
+	public void setLoanAmount(Float loanAmount) {
+		this.loanAmount = loanAmount;
+	}
+
+	public double getEmiAmount() {
+		return emiAmount;
+	}
+
+	public void setEmiAmount(double emiAmount) {
+		this.emiAmount = emiAmount;
+	}
+
+	public LoanAccount(Integer accountId, String remarks, Float debit, Float credit, Float balance, Float loanAmount,
+			double emiAmount, User user) {
 		super();
 		this.accountId = accountId;
 		this.remarks = remarks;
 		this.debit = debit;
 		this.credit = credit;
 		this.balance = balance;
+		this.loanAmount = loanAmount;
+		this.emiAmount = emiAmount;
 		this.user = user;
 	}
 
-	public LoanAccount() {		
+	public LoanAccount() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	
 

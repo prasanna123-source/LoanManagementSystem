@@ -8,7 +8,13 @@ public class LoanApplianceDTO {
 	private Float amount ;
 	private Float rateOfInterest;
 	private int loan_id;
-	
+	private String paidinfo;
+	public String getPaidinfo() {
+		return paidinfo;
+	}
+	public void setPaidinfo(String paidinfo) {
+		this.paidinfo = paidinfo;
+	}
 	public int getLoan_id() {
 		return loan_id;
 	}

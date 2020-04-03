@@ -1,16 +1,19 @@
 package com.app.service;
 
-import java.util.Optional;
+import java.util.List;
 
+import com.app.entity.LoanAccount;
 import com.app.entity.LoanDetails;
 import com.app.entity.User;
 import com.app.entity.UserLoan;
 import com.app.model.LoanApplianceDTO;
-import com.app.model.LoanRequest;
+import com.app.model.UserLoanDetails;
 
 public interface LoanApplicationService {
 //	User applyForLoan(User user);	
 	public LoanDetails applyForLoan(LoanApplianceDTO loanApplianceDTO) ;
-	public Optional<UserLoan> findLoanById(long loanId);
-	LoanDetails saveLoan(LoanRequest request); 
+	
+	public UserLoanDetails EmiDeductionDetails(LoanAccount loanAccount);
+	public UserLoan fetchLoan(int uid);
+	public List<LoanDetails> getAllLoanDeatils(User uid);
 }

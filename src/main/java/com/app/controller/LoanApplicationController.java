@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.entity.LoanAccount;
 import com.app.entity.LoanDetails;
 import com.app.entity.User;
 import com.app.entity.UserLoan;
 import com.app.model.LoanApplianceDTO;
 import com.app.model.LoanRequest;
+import com.app.model.UserLoanDetails;
 import com.app.service.LoanApplicationService;
 
 @RestController
@@ -36,26 +38,20 @@ public class LoanApplicationController {
 		return ResponseEntity.ok().body(loanDetails);
 	}
 	
-//	@GetMapping
-//	public ResponseEntity<?> fetchLoanDetails(){
-//		List<User> response = loanService.fetLoans();
-//		return ResponseEntity.ok().body(response);
-//	}
-//	
-//	@GetMapping("/loanData/{userId}")
-//	public ResponseEntity<?> fetchLoan(@PathVariable("userId") Integer userId){
-//		Optional<User> response = loanService.fetchLoan(userId);
-//		return ResponseEntity.ok().body(response);
-//	}
-//	
-//	@GetMapping(value = "/{loanId}")
-//    public ResponseEntity<?> findLoanById(@PathVariable("loanId") long loanId) {
-//        java.util.Optional<UserLoan> loan$ = loanService.findLoanById(loanId);
-//
-//        if (loan$.isPresent()) {
-//            return new ResponseEntity<>(loan$.get(), HttpStatus.OK);
-//        }
-//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//    }
+	@GetMapping("/loanData/{userId}")
+	public ResponseEntity<?> fetchLoanById(@PathVariable("userId") Integer userId){
+		UserLoan response = loanService.fetchLoan(userId);
+		return ResponseEntity.ok().body(response);
+	}
+    
+	@GetMapping("/getLoanDetails")
+	public ResponseEntity<?> getAllLoanDetails(@PathVariable("userId") User user) {
+		return new ResponseEntity<>(loanService.getAllLoanDeatils(user), HttpStatus.OK);
+	}
+	
+	@GetMapping("/EmiDetails")
+	public ResponseEntity<?> getAllEmiDetails(LoanAccount loanAccount) {
+		return new ResponseEntity<>(loanService.EmiDeductionDetails(loanAccount), HttpStatus.OK);
+	}
 	
 }
